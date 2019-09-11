@@ -53,6 +53,7 @@
  * 10            yes     no         no          Kwanzaa
  * 11            yes     no         no          Rainbow
  * 12            yes     no         no          Fire
+ * 13            yes     no         no          World-Clock
  *
 \*********************************************************************************************/
 
@@ -124,7 +125,7 @@
 #define XDRV_04              4
 //#define DEBUG_LIGHT
 
-const uint8_t WS2812_SCHEMES = 7;    // Number of additional WS2812 schemes supported by xdrv_ws2812.ino
+const uint8_t WS2812_SCHEMES = 8;    // Number of additional WS2812 schemes supported by xdrv_ws2812.ino
 
 enum LightCommands {
   CMND_COLOR, CMND_COLORTEMPERATURE, CMND_DIMMER, CMND_LED, CMND_LEDTABLE, CMND_FADE,
