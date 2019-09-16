@@ -397,7 +397,7 @@ void Ws2812ShowScheme(uint8_t scheme)
   }
 }
 
-// World clock logic
+//World clock logic
 
 //Actual words as array variables
 int Hashtags[]           = {3, 6, 43, 71, -1};
@@ -436,25 +436,37 @@ int WordWeatherDroog[]   = {139, 140, 141, 142, 143, -1};
 
 void Ws2812WorldClock()
 {
-    byte second, minute, hour;
-
-    second = RtcTime.second;
+    byte minute, hour;
     minute = RtcTime.minute;
     hour   = RtcTime.hour;
 
-    // light up "het" it stays on
+    //light up "het" always stays on.
     lightup(WordHet, true, 1);
 
-    // light off "hastags" is always off
-    lightup(Hashtags, false, 1);
-
-    lightupAbout(minute);
-    lightupHourMinute(hour, minute);
+    lightUnused();
+    lightAbout(minute);
+    lightHourMinute(hour, minute);
     Ws2812StripShow();
 }
 
-void lightupAbout(int minute){
-    // If it's bang on 5 mins, or 10 mins etc, it's not 'about' so turn it off.
+void lightUnused()
+{
+    //Disable hashtags, these are not used.
+    lightup(Hashtags,           false, 1);
+    //Disable upcomming temperature feature.
+    lightup(WordTempEen,        false, 1);
+    lightup(WordTempTwee,       false, 1);
+    lightup(WordTempDrie,       false, 1);
+    lightup(WordTempGraden,     false, 1);
+    //Disable upcomming weather forecast feature.
+    lightup(WordWeatherGaat,    false, 1);
+    lightup(WordWeatherZonnig,  false, 1);
+    lightup(WordWeatherRegenen, false, 1);
+    lightup(WordWeatherDroog,   false, 1);
+}
+
+void lightAbout(int minute){
+    //If it's bang on 5 mins, or 10 mins etc, it's not 'about' so turn it off.
     if((minute == 0)
       |(minute == 5)
       |(minute == 10)
@@ -474,7 +486,7 @@ void lightupAbout(int minute){
     }
 }
 
-void lightupHourMinute(int hour, int minute) {
+void lightHourMinute(int hour, int minute) {
     //First turn everything off.
     lightup(WordMinVijf, false, 1);
     lightup(WordMinTien, false, 1);
@@ -487,78 +499,78 @@ void lightupHourMinute(int hour, int minute) {
     lightup(WordUur,     false, 1);
       
     if ((minute >= 0) && (minute <5)) {
-        lightupHour(hour);
+        lightHour(hour);
         lightup(WordUur,     true, 1);
     }
     else if ((minute >= 5) && (minute <10)) {
         lightup(WordMinVijf, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordOver,    true, 1);
-        lightupHour(hour);
+        lightHour(hour);
     }
     else if ((minute >= 10) && (minute <15)) {
         lightup(WordMinTien, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordOver,    true, 1);
-        lightupHour(hour);
+        lightHour(hour);
     }
     else if ((minute >= 15) && (minute <20)) {
         lightup(WordKwart,   true, 1);
         lightup(WordOver,    true, 1);
-        lightupHour(hour);
+        lightHour(hour);
     }
     else if ((minute >= 20) && (minute <25)) {
         lightup(WordMinTien, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordVoor,    true, 1);
         lightup(WordHalf,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 25) && (minute <30)) {
         lightup(WordMinVijf, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordVoor,    true, 1);
         lightup(WordHalf,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 30) && (minute <35)) {
         lightup(WordHalf,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 35) && (minute <40)) {
         lightup(WordMinVijf, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordOver,    true, 1);
         lightup(WordHalf,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 40) && (minute <45)) {
         lightup(WordMinTien, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordOver,    true, 1);
         lightup(WordHalf,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 45) && (minute <50)) {
         lightup(WordKwart,   true, 1);
         lightup(WordVoor,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 50) && (minute <55)) {
         lightup(WordMinTien, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordVoor,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
     else if ((minute >= 55) && (minute <=59)) {
         lightup(WordMinVijf, true, 1);
         lightup(WordMinuten, true, 1);
         lightup(WordVoor,    true, 1);
-        lightupHour(hour + 1);
+        lightHour(hour + 1);
     }
 }
 
-void lightupHour(int hour) {
+void lightHour(int hour) {
     //First turn everything off.
     lightup(WordEen,    false, 1);
     lightup(WordTwee,   false, 1);
@@ -642,6 +654,11 @@ void lightup(int Word[], bool on, int dimmer_offset) {
   off.R = 0;
   off.G = 0;
   off.B = 0;
+  
+  #if (USE_WS2812_CTYPE > 1)
+    color.W = ((Settings.light_color[3] / dimmer ) / dimmer_offset);
+    off.W = 0;
+  #endif
 
   for (int x = 0; x < (int)Settings.light_pixels + 1; x++) {
     if(Word[x] == -1) {
