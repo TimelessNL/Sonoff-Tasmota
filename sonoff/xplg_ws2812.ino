@@ -396,612 +396,233 @@ void Ws2812ShowScheme(uint8_t scheme)
       break;
   }
 }
+
 // World clock logic
 
 //Actual words as array variables
-int Hashtags[] = {3, 9, 10, 11, 21, 22, 23, 35, 47, 58, 59, 71, -1};
-int WordIts[] = {0, 1, 2, -1};
-int WordAbout[] = {4, 5, 6, 7, 8, -1};
-int WordTwenty[] = {12, 13, 14, 15, 16, 17, -1};
-int WordMinTen[] = {18, 19, 20, -1};
-int WordMinFive[] = {24, 25, 26, 27, -1};
-int WordQuarter[] = {28, 29, 30, 31, 32, 33, 34, -1};
-int WordMinutes[] = {36, 37, 38, 39, 40, 41, 42, -1};
-int WordHalf[] = {43, 44, 45, 46, -1};
-int WordTo[] = {48, 49, -1};
-int WordPast[] = {50, 51, 52, 53, -1};
-int WordFive[] = {54, 55, 56, 57, -1};
-int WordOne[] = {60, 61, 62, -1};
-int WordTwo[] = {63, 64, 65, -1};
-int WordThree[] = {66, 67, 68, 69, 70, -1};
-int WordFour[] = {72, 73, 74, 75, -1};
-int WordSix[] = {76, 77, 78, -1};
-int WordSeven[] = {79, 80, 81, 82, 83, -1};
-int WordEight[] = {84, 85, 86, 87, 88, -1};
-int WordNine[] = {89, 90, 91, 92, -1};
-int WordTen[] = {93, 94, 95, -1};
-int WordEleven[] = {96, 97, 98, 99, 100, 101, -1};
-int WordTwelve[] = {102, 103, 104, 105, 106, 107, -1};
-int WordOclock[] = {108, 109, 110, 111, 112, 113, -1};
-
-int flag = 0; //used for display effects to stop it showing more than once
+int Hashtags[]           = {3, 6, 43, 71, -1};
+int WordHet[]            = {0, 1, 2, -1};
+int WordIs[]             = {4, 5, -1};
+int WordBijna[]          = {7, 8, 9, 10, 11, -1};
+int WordTwintig[]        = {12, 13, 14, 15, 16, 17, 18, -1};
+int WordKwart[]          = {19, 20, 21, 22, 23, -1};
+int WordMinVijf[]        = {24, 25, 26, 27, -1};
+int WordMinTien[]        = {28, 29, 30, 31, -1};
+int WordWeatherGaat[]    = {32, 33, 34, 35, -1};
+int WordMinuten[]        = {36, 37, 38, 39, 40, 41, 42, -1};
+int WordVoor[]           = {44, 45, 46, 47, -1};
+int WordOver[]           = {48, 49, 50, 51, -1};
+int WordTempTwee[]       = {52, 53, 54, 55, -1};
+int WordHalf[]           = {56, 57, 58, 59, -1};
+int WordEen[]            = {60, 61, 62, -1};
+int WordTwee[]           = {63, 64, 65, 66, -1};
+int WordDrie[]           = {67, 68, 69, 70, -1};
+int WordVier[]           = {72, 73, 74, 75, -1};
+int WordVijf[]           = {76, 77, 78, 79, -1};
+int WordTempDrie[]       = {80, 81, 82, 83, -1};
+int WordZeven[]          = {84, 85, 86, 87, 88, -1};
+int WordAcht[]           = {89, 90, 91, 92, -1};
+int WordElf[]            = {93, 94, 95, -1};
+int WordNegen[]          = {96, 97, 98, 99, 100, -1};
+int WordTien[]           = {101, 102, 103, 104, -1};
+int WordTempEen[]        = {105, 106, 107, -1};
+int WordTwaalf[]         = {108, 109, 110, 111, 112, 113, -1};
+int WordZes[]            = {114, 115, 116, -1};
+int WordUur[]            = {117, 118, 119, -1};
+int WordTempGraden[]     = {120, 121, 122, 123, 124, 125, -1};
+int WordWeatherZonnig[]  = {126, 127, 128, 129, 130, 131 -1};
+int WordWeatherRegenen[] = {132, 133, 134, 135, 136, 137, 138, -1};
+int WordWeatherDroog[]   = {139, 140, 141, 142, 143, -1};
 
 void Ws2812WorldClock()
 {
-  byte second, minute, hour;
+    byte second, minute, hour;
 
-  second = RtcTime.second;
-  minute = RtcTime.minute;
-  hour   = RtcTime.hour;
+    second = RtcTime.second;
+    minute = RtcTime.minute;
+    hour   = RtcTime.hour;
 
-  // light up "it's" it stays on
-  lightup(WordIts, true, 1);
+    // light up "het" it stays on
+    lightup(WordHet, true, 1);
 
-  // light off "hastags" is always off
-  lightup(Hashtags, false, 1);
+    // light off "hastags" is always off
+    lightup(Hashtags, false, 1);
 
-  if((minute >= 0) && (minute < 5)){
-    lightup(WordOclock, true, 1);
-  }
-  else {
-    lightup(WordOclock, false, 1);
-  }
-
-// If it's bang on 5 mins, or 10 mins etc, it's not 'about' so turn it off.
-  if((minute == 0)
-    |(minute == 5)
-    |(minute == 10)
-    |(minute == 15)
-    |(minute == 20)
-    |(minute == 25)
-    |(minute == 30)
-    |(minute == 35)
-    |(minute == 40)
-    |(minute == 45)
-    |(minute == 50)
-    |(minute == 55)){
-      lightup(WordAbout, false, 1);
-    }
-  else{
-      if((minute == 6)
-    |(minute == 1)
-    |(minute == 11)
-    |(minute == 16)
-    |(minute == 21)
-    |(minute == 26)
-    |(minute == 31)
-    |(minute == 36)
-    |(minute == 41)
-    |(minute == 46)
-    |(minute == 51)
-    |(minute == 56)){
-      lightup(WordAbout, true, 2);
-    }
-      else if ((minute == 7)
-    |(minute == 2)
-    |(minute == 17)
-    |(minute == 22)
-    |(minute == 27)
-    |(minute == 32)
-    |(minute == 37)
-    |(minute == 42)
-    |(minute == 47)
-    |(minute == 52)
-    |(minute == 57)){
-      lightup(WordAbout, true, 4);
-    }
-     else if ((minute == 8)
-    |(minute == 13)
-    |(minute == 3)
-    |(minute == 18)
-    |(minute == 23)
-    |(minute == 28)
-    |(minute == 33)
-    |(minute == 38)
-    |(minute == 43)
-    |(minute == 48)
-    |(minute == 53)
-    |(minute == 58)){
-      lightup(WordAbout, true, 8);
-    }
-      else if ((minute == 9)
-    |(minute == 14)
-    |(minute == 4)
-    |(minute == 19)
-    |(minute == 24)
-    |(minute == 29)
-    |(minute == 34)
-    |(minute == 39)
-    |(minute == 44)
-    |(minute == 49)
-    |(minute == 54)
-    |(minute == 59)){
-      lightup(WordAbout, true, 10);
-    }
-      else {
-      lightup(WordAbout, true, 1);
-      }
-    }
-
-  if(minute <35){
-  //Set hour if minutes are less than 35
-  switch (hour) {
-    case 1:
-    case 13:
-      lightup(WordOne, true, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 2:
-    case 14:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, true, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 3:
-    case 15:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, true, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 4:
-    case 16:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, true, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 5:
-    case 17:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, true, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 6:
-    case 18:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, true, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 7:
-    case 19:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, true, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 8:
-    case 20:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, true, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 9:
-    case 21:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, true, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 10:
-    case 22:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, true, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 11:
-    case 23:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, true, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 00:
-    case 12:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, true, 1);
-      break;
-      }
-      if ((minute >= 0) && (minute <5)) {
-        lightup(WordPast, false, 1);
-        lightup(WordTo, false, 1);
-        }
-      else {
-        lightup(WordPast, true, 1);
-        lightup(WordTo, false, 1);
-        }
-  }
-
-else if (minute >34) {
- //Set hour if minutes are greater than 34
-  switch (hour) {
-    case 1:
-    case 13:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, true, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 2:
-    case 14:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, true, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 3:
-    case 15:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, true, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 4:
-    case 16:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, true, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 5:
-    case 17:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, true, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 6:
-    case 18:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, true, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 7:
-    case 19:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, true, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 8:
-    case 20:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, true, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 9:
-    case 21:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, true, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 10:
-    case 22:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, true, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-    case 11:
-    case 23:
-      lightup(WordOne, false, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, true, 1);
-      break;
-    case 00:
-    case 12:
-      lightup(WordOne, true, 1);
-      lightup(WordTwo, false, 1);
-      lightup(WordThree, false, 1);
-      lightup(WordFour, false, 1);
-      lightup(WordFive, false, 1);
-      lightup(WordSix, false, 1);
-      lightup(WordSeven, false, 1);
-      lightup(WordEight, false, 1);
-      lightup(WordNine, false, 1);
-      lightup(WordTen, false, 1);
-      lightup(WordEleven, false, 1);
-      lightup(WordTwelve, false, 1);
-      break;
-       }
-      lightup(WordPast, false, 1);
-      lightup(WordTo, true, 1);
-    }
-
-if ((minute >= 5) && (minute <10)) {
-      lightup(WordMinFive, true, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 10) && (minute <15)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, true, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 15) && (minute <20)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, true, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, false, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 20) && (minute <25)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, true, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 25) && (minute <30)) {
-      lightup(WordMinFive, true, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, true, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 30) && (minute <35)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, false, 1);
-      lightup(WordHalf, true, 1);
-}
-else if ((minute >= 35) && (minute <40)) {
-      lightup(WordMinFive, true, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, true, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 40) && (minute <45)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, true, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 45) && (minute <50)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, true, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, false, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 50) && (minute <55)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, true, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 55) && (minute <=59)) {
-      lightup(WordMinFive, true, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, true, 1);
-      lightup(WordHalf, false, 1);
-}
-else if ((minute >= 0) && (minute <5)) {
-      lightup(WordMinFive, false, 1);
-      lightup(WordMinTen, false, 1);
-      lightup(WordQuarter, false, 1);
-      lightup(WordTwenty, false, 1);
-      lightup(WordMinutes, false, 1);
-      lightup(WordHalf, false, 1);
-}
+    lightupAbout(minute);
+    lightupHourMinute(hour, minute);
     Ws2812StripShow();
+}
+
+void lightupAbout(int minute){
+    // If it's bang on 5 mins, or 10 mins etc, it's not 'about' so turn it off.
+    if((minute == 0)
+      |(minute == 5)
+      |(minute == 10)
+      |(minute == 15)
+      |(minute == 20)
+      |(minute == 25)
+      |(minute == 30)
+      |(minute == 35)
+      |(minute == 40)
+      |(minute == 45)
+      |(minute == 50)
+      |(minute == 55)){
+         lightup(WordBijna, false, 1);
+    }
+    else{
+         lightup(WordBijna, true, 1);
+    }
+}
+
+void lightupHourMinute(int hour, int minute) {
+    //First turn everything off.
+    lightup(WordMinVijf, false, 1);
+    lightup(WordMinTien, false, 1);
+    lightup(WordKwart,   false, 1);
+    lightup(WordTwintig, false, 1);
+    lightup(WordMinuten, false, 1);
+    lightup(WordHalf,    false, 1);
+    lightup(WordOver,    false, 1);
+    lightup(WordVoor,    false, 1);
+    lightup(WordUur,     false, 1);
+      
+    if ((minute >= 0) && (minute <5)) {
+        lightupHour(hour);
+        lightup(WordUur,     true, 1);
+    }
+    else if ((minute >= 5) && (minute <10)) {
+        lightup(WordMinVijf, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordOver,    true, 1);
+        lightupHour(hour);
+    }
+    else if ((minute >= 10) && (minute <15)) {
+        lightup(WordMinTien, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordOver,    true, 1);
+        lightupHour(hour);
+    }
+    else if ((minute >= 15) && (minute <20)) {
+        lightup(WordKwart,   true, 1);
+        lightup(WordOver,    true, 1);
+        lightupHour(hour);
+    }
+    else if ((minute >= 20) && (minute <25)) {
+        lightup(WordMinTien, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordVoor,    true, 1);
+        lightup(WordHalf,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 25) && (minute <30)) {
+        lightup(WordMinVijf, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordVoor,    true, 1);
+        lightup(WordHalf,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 30) && (minute <35)) {
+        lightup(WordHalf,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 35) && (minute <40)) {
+        lightup(WordMinVijf, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordOver,    true, 1);
+        lightup(WordHalf,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 40) && (minute <45)) {
+        lightup(WordMinTien, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordOver,    true, 1);
+        lightup(WordHalf,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 45) && (minute <50)) {
+        lightup(WordKwart,   true, 1);
+        lightup(WordVoor,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 50) && (minute <55)) {
+        lightup(WordMinTien, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordVoor,    true, 1);
+        lightupHour(hour + 1);
+    }
+    else if ((minute >= 55) && (minute <=59)) {
+        lightup(WordMinVijf, true, 1);
+        lightup(WordMinuten, true, 1);
+        lightup(WordVoor,    true, 1);
+        lightupHour(hour + 1);
+    }
+}
+
+void lightupHour(int hour) {
+    //First turn everything off.
+    lightup(WordEen,    false, 1);
+    lightup(WordTwee,   false, 1);
+    lightup(WordDrie,   false, 1);
+    lightup(WordVier,   false, 1);
+    lightup(WordVijf,   false, 1);
+    lightup(WordZes,    false, 1);
+    lightup(WordZeven,  false, 1);
+    lightup(WordAcht,   false, 1);
+    lightup(WordNegen,  false, 1);
+    lightup(WordTien,   false, 1);
+    lightup(WordElf,    false, 1);
+    lightup(WordTwaalf, false, 1);
+
+    switch (hour) {
+        case 1:
+        case 13:
+            lightup(WordEen, true, 1);
+            break;
+        case 2:
+        case 14:
+            lightup(WordTwee, true, 1);
+            break;
+        case 3:
+        case 15:
+            lightup(WordDrie, true, 1);
+            break;
+        case 4:
+        case 16:
+            lightup(WordVier, true, 1);
+            break;
+        case 5:
+        case 17:
+            lightup(WordVijf, true, 1);
+            break;
+        case 6:
+        case 18:
+            lightup(WordZes, true, 1);
+            break;
+        case 7:
+        case 19:
+            lightup(WordZeven, true, 1);
+            break;
+        case 8:
+        case 20:
+            lightup(WordAcht, true, 1);
+            break;
+        case 9:
+        case 21:
+            lightup(WordNegen, true, 1);
+            break;
+        case 10:
+        case 22:
+            lightup(WordTien, true, 1);
+            break;
+        case 11:
+        case 23:
+            lightup(WordElf, true, 1);
+            break;
+        case 00:
+        case 12:
+            lightup(WordTwaalf, true, 1);
+            break;
+    }
 }
 
 void lightup(int Word[], bool on, int dimmer_offset) {
